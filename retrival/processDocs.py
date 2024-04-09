@@ -24,6 +24,12 @@ collections = {
         'directory' : './training-data/YIPS',
         'glob' : '*.md',
     },
+    'apyData' :  {
+        'collection_name' : 'apyData',
+        'description' : 'Yearn APY data',
+        'directory' : './training-data/apyData',
+        'glob' : '*.md',
+    }
 }
 
 # Option to load from a directory of PDFs & get text to feed into DB 

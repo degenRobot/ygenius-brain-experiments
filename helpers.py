@@ -26,8 +26,27 @@ def getOllamaResponse(
     _response = _out["response"]
     return _response
 
+def convSizeManager(convList, maxConvLength=configuration["maxConervationLength"]):
+    # Check the size of the conversation
+    # If the conversation is too long, remove the first element
+    # This is to prevent the conversation from growing too large
+    # and to keep the conversation manageable
+    conversation = ""
+    for i in range(len(convList)) :
+        conversation += convList[i]
+    n = len(convList)
+    if (countTokens(conversation) > maxConvLength):
+        newConversation = ""
+
+        newLen = int(n * 0.6) 
+        convList = convList[-newLen:]
+
+
+    return convList
+
+
 async def getReplicateResponse(
-    prompt, modelName="", deployment=configuration["replicateDeployment"], temperature=0.1, topP=0.9
+    prompt, modelName="", deployment=configuration["replicateDeployment"], temperature=0.5, topP=0.96
 ):
 
     deployment = replicate.deployments.get(deployment)
@@ -72,6 +91,8 @@ def fetchContext(query) :
             for i in range(n) : 
                 context += _retriveDocs[i].page_content + "\n"
 
+    if configuration["enableLogging"] : 
+        print("Fetched Context : " + context)
 
     return context
     
