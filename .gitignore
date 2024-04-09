@@ -1,3 +1,6 @@
 .env
 index.json
 index_new.json
+chroma/
+*.pyc
+*.gz
