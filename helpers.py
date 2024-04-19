@@ -1,6 +1,3 @@
-import inquirer
-import re
-
 from config import configuration
 import ollama
 from retrival.processDocs import collections
@@ -9,6 +6,24 @@ import chromadb
 
 import replicate
 from transformers import AutoModelForCausalLM, AutoTokenizer
+
+import os
+from together import Together
+
+client = Together(api_key=os.environ.get("TOGETHER_API_KEY"))
+
+async def getTogetherResponse(
+    sysPrompt, query, modelName=configuration["togetherModel"]
+):
+    response = client.chat.completions.create(
+        model=modelName,
+        messages=[{"role": "system", "content": sysPrompt},
+                  {"role": "user", "content": query},
+        ]
+    )
+    return response.choices[0].message.content
+
+
 tokenizer = AutoTokenizer.from_pretrained("Upstage/SOLAR-10.7B-Instruct-v1.0")
 
 persistent_client = chromadb.PersistentClient()
@@ -43,6 +58,7 @@ def convSizeManager(convList, maxConvLength=configuration["maxConervationLength"
 
 
     return convList
+
 
 
 async def getReplicateResponse(

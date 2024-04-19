@@ -1,21 +1,22 @@
-# yGenius Brain
+# yGenius Brain Experiment
 
-[![](https://licensebuttons.net/p/zero/1.0/88x31.png)](https://creativecommons.org/publicdomain/zero/1.0/)
+Some custom scripts combining OS LLM's + RAG mechanics with docs from yGenius repo to answer q&a 
 
-What is this: https://medium.com/@marcoworms/ygenius-chat-with-yearn-efa17d3f0ec8  
-Frontend Source: https://github.com/yearn/ygenius-webui
-
-![image](https://user-images.githubusercontent.com/7863230/219803104-9612160e-8a1b-42b1-9af5-12fccf77232d.png)
+(questions can be asked direclty from terminal)
 
 ## Configuration
 
-- copy `.env.sample` to `.env` and set environment variables (only `OPENAI_API_KEY` is mandatory)
+- copy `.env.sample` to `.env` and set environment variables 
 - copy `index.json` model file to the current dir or generate a new one
+
+- Note custom docs can be added in training-data directory if want to have custom context & adapt 
+- config.py contains configuration option such as using external api (together.ai) or running LLM locally 
+- prompt can be customised in chatMechanics/promptBuilder.py
 
 ## Run
 
-Install docker and docker-compose and run:
-`docker-compose up -d`
+setup.py will setup chromadb & create embeddings based on documents in training-data
+chat.py will open up chat (either calling together api or running model locally using ollama)
 
 ## Development
 

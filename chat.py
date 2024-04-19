@@ -1,5 +1,5 @@
 from helpers import *
-from chatMechanics.promptBuilder import localLLMPrompt
+from chatMechanics.promptBuilder import localLLMPrompt, sysPrompt
 import asyncio
 
 initialInstruction = configuration["initialInstruction"]
@@ -18,19 +18,29 @@ async def chat():
         context = fetchContext(query)
 
         # Get response from model 
-        prompt = localLLMPrompt.format(
-            char="Assistant", 
+        if configuration["useOllama"] :
+            prompt = localLLMPrompt.format(
+                char="Assistant", 
+                context=context, 
+                conversation=conversation, 
+                query = query, 
+                initialInstruction=initialInstruction,
+                endInstruction=endInstruction
+            )
+        else :
+            prompt = sysPrompt.format(
             context=context, 
             conversation=conversation, 
             query = query, 
             initialInstruction=initialInstruction,
             endInstruction=endInstruction
         )
+            
         if configuration["useOllama"] :
 
             response = getOllamaResponse(prompt)
         else : 
-            response = await getReplicateResponse(prompt)
+            response = await getTogetherResponse(prompt, query)
 
 
         print(response)

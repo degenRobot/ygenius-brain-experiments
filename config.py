@@ -51,10 +51,10 @@ configuration = {
     "maxConervationLength" : maxConervationLength,
     "summaryPercent" : summaryPercent,
     "maxTokensOut" : maxTokensOut,
-    "useOllama" : True,
+    "useOllama" : False,
     "embedding" : embedding,
     "enableLogging" : False,
-    "replicateDeployment" : solarDeploy,
+    "togetherModel" : "meta-llama/Llama-3-8b-chat-hf",
     "initialInstruction" : initialInstruction,
     "finalInstruction" : endInstruction
 
