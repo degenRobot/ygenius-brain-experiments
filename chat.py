@@ -12,7 +12,11 @@ async def chat():
     conversation = ""
     while True : 
 
-        query = input("Ask a question: ")
+        print("Ask a question about Yearn Finance ")
+
+        query = input()
+
+        print("------------------------------------")
 
         # Get context from the documents
         context = fetchContext(query)

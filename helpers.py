@@ -61,6 +61,7 @@ def convSizeManager(convList, maxConvLength=configuration["maxConervationLength"
 
 
 
+"""
 async def getReplicateResponse(
     prompt, modelName="", deployment=configuration["replicateDeployment"], temperature=0.5, topP=0.96
 ):
@@ -84,7 +85,7 @@ async def getReplicateResponse(
         # item is generator object -> can be streamed to UI
         out += str(item)
     return out
-
+"""
 
 def fetchContext(query) : 
 
