@@ -24,6 +24,22 @@ async def getTogetherResponse(
     return response.choices[0].message.content
 
 
+async def getTogetherReponseFunction(
+    sysPrompt, query, tools, modelName=configuration["togetherModelTools"], 
+):
+    messages = [
+        {"role": "system", "content": sysPrompt},
+        {"role": "user", "content": query},
+    ]
+    response = client.chat.completions.create(
+        model=modelName,
+        messages=messages,
+        tools=tools,
+        tool_choice="auto",
+    )
+    return response
+
+
 tokenizer = AutoTokenizer.from_pretrained("Upstage/SOLAR-10.7B-Instruct-v1.0")
 
 persistent_client = chromadb.PersistentClient()
@@ -87,12 +103,27 @@ async def getReplicateResponse(
     return out
 """
 
-def fetchContext(query) : 
+def fetchContext(query, singleCollection = False, collectionName = "") : 
 
     # Start with empty string & query all collections
     context = ""
     maxDocsIn = 3
     
+    if singleCollection : 
+        _chromaCollection = Chroma(
+            client = persistent_client,
+            collection_name = collectionName,
+            embedding_function = configuration["embedding"]
+        )
+        _retriveDocs = _chromaCollection.similarity_search(query)
+
+        if len(_retriveDocs) > 0 :
+            context += "Retrived from " + collections[collectionName]['description'] + "\n"
+            n = min(len(_retriveDocs), maxDocsIn)
+            for i in range(n) : 
+                context += _retriveDocs[i].page_content + "\n"
+        return context
+
     for collection in collections.keys() : 
         
         _chromaCollection = Chroma(

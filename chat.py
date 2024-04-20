@@ -1,6 +1,10 @@
 from helpers import *
 from chatMechanics.promptBuilder import localLLMPrompt, sysPrompt
+from retrival.retrivalFunctions import tools
 import asyncio
+import json
+
+retrivalPrompt = configuration["retrivalPrompt"]
 
 initialInstruction = configuration["initialInstruction"]
 endInstruction = configuration["finalInstruction"]
@@ -16,10 +20,30 @@ async def chat():
 
         query = input()
 
+        ### get query information
+        response = await getTogetherReponseFunction(
+            retrivalPrompt,
+            query,
+            tools=tools,
+            modelName=configuration["togetherModelTools"]
+        )
+
+        tool_calls = response.choices[0].message.tool_calls
+
+        if (tool_calls) : 
+            args = json.loads(tool_calls[0].function.arguments)
+            collection = args["collection"]
+            query = args["query"]
+
+            context = fetchContext(query, singleCollection=True, collectionName=collection)
+            print(context)
+        else : 
+            context = fetchContext(query)
+
+
         print("------------------------------------")
 
         # Get context from the documents
-        context = fetchContext(query)
 
         # Get response from model 
         if configuration["useOllama"] :

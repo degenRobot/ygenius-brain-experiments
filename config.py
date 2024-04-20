@@ -37,6 +37,13 @@ normalMode = """You are assisting a user to answer questions about Yearn Finance
 
 """
 
+
+retrivalPrompt = """
+You are helping to determine which vector database to search to pull additional context in required to answer a users question about Yearn Finance
+
+This information will be used to help answer the users question about Yearn Finance
+"""
+
 useWaifuMode = True
 
 if useWaifuMode :
@@ -55,7 +62,10 @@ configuration = {
     "embedding" : embedding,
     "enableLogging" : False,
     "togetherModel" : "meta-llama/Llama-3-8b-chat-hf",
+    "togetherModelTools":  "mistralai/Mixtral-8x7B-Instruct-v0.1",
     "initialInstruction" : initialInstruction,
-    "finalInstruction" : endInstruction
+    "finalInstruction" : endInstruction,
+    "retrivalPrompt" : retrivalPrompt,
+
 
 }
